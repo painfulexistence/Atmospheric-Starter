@@ -1,0 +1,78 @@
+name: Build (WebAssembly)
+
+# Validates that GradientQuad links successfully as a WebAssembly module.
+# A successful link catches the majority of WebGL-specific failures:
+#   - Missing Emscripten flags (-sALLOW_MEMORY_GROWTH, -sDISABLE_EXCEPTION_CATCHING)
+#   - WASM-incompatible dependencies (x86 archives, system glad, etc.)
+#   - Emscripten-incompatible C++ (non-portable intrinsics, POSIX-only APIs)
+#
+# The .html + .wasm + .js + .data artifact is uploaded for manual browser testing.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# Keep in sync with the EMSDK version used locally (wasm CMakePreset comment).
+env:
+  EMSDK_VERSION: "4.0.18"
+
+jobs:
+  build-wasm:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      # EMSDK env var is exported automatically and is read by CMakeLists.txt:
+      #   set(VCPKG_CHAINLOAD_TOOLCHAIN_FILE $ENV{EMSDK}/upstream/emscripten/cmake/…)
+      - name: Set up Emscripten SDK
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: ${{ env.EMSDK_VERSION }}
+          actions-cache-folder: emsdk-${{ env.EMSDK_VERSION }}
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends cmake ninja-build pkg-config
+
+      - name: Bootstrap vcpkg
+        run: ${{ github.workspace }}/Atmospheric/vcpkg/bootstrap-vcpkg.sh -disableMetrics
+
+      # Cache key includes the triplet file so that changing compile flags
+      # (e.g. adding -pthread) correctly invalidates the cached libraries.
+      - name: Cache vcpkg installed packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ github.workspace }}/Atmospheric/vcpkg/installed
+            ${{ github.workspace }}/Atmospheric/vcpkg/packages
+          key: vcpkg-wasm32-emscripten-${{ hashFiles('vcpkg.json', 'Atmospheric/triplets/wasm32-emscripten.cmake') }}
+          restore-keys: |
+            vcpkg-wasm32-emscripten-
+
+      - name: CMake Configure
+        run: >
+          cmake -G Ninja
+          -B ${{ github.workspace }}/build
+          -S ${{ github.workspace }}
+          -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/Atmospheric/vcpkg/scripts/buildsystems/vcpkg.cmake
+          -DVCPKG_OVERLAY_TRIPLETS=${{ github.workspace }}/Atmospheric/triplets
+          -DVCPKG_TARGET_TRIPLET=wasm32-emscripten
+          -DCMAKE_BUILD_TYPE=MinSizeRel
+
+      - name: CMake Build
+        run: cmake --build ${{ github.workspace }}/build --parallel
+
+      - name: Upload WebAssembly artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradient-quad-wasm-${{ github.sha }}
+          path: ${{ github.workspace }}/build/GradientQuad/
+          if-no-files-found: error
+          retention-days: 30
