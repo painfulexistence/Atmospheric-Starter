@@ -1,0 +1,3 @@
+[submodule "Atmospheric"]
+	path = Atmospheric
+	url = https://github.com/painfulexistence/Atmospheric.git

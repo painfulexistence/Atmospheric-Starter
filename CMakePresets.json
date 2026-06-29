@@ -1,0 +1,73 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": { "major": 3, "minor": 25, "patch": 0 },
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/build"
+    },
+    {
+      "name": "vcpkg-submodule",
+      "hidden": true,
+      "description": "vcpkg bundled inside the Atmospheric submodule — works offline after first build",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/Atmospheric/vcpkg/scripts/buildsystems/vcpkg.cmake"
+      }
+    },
+    {
+      "name": "vcpkg-system",
+      "hidden": true,
+      "description": "System-wide vcpkg via VCPKG_ROOT env var (GitHub Actions / CI)",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+      }
+    },
+    {
+      "name": "desktop",
+      "displayName": "Desktop (local vcpkg, Ninja Multi-Config)",
+      "description": "Default developer preset — uses vcpkg from the Atmospheric submodule",
+      "inherits": ["base", "vcpkg-submodule"]
+    },
+    {
+      "name": "desktop-ci",
+      "displayName": "Desktop CI (system vcpkg, Ninja Multi-Config)",
+      "description": "For GitHub Actions; expects VCPKG_ROOT to be set",
+      "hidden": true,
+      "inherits": ["base", "vcpkg-system"]
+    },
+    {
+      "name": "wasm",
+      "displayName": "WebAssembly (Emscripten + local vcpkg, MinSizeRel)",
+      "description": "Requires EMSDK env var pointing to an activated emsdk installation",
+      "binaryDir": "${sourceDir}/build-wasm",
+      "inherits": ["vcpkg-submodule"],
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "wasm32-emscripten",
+        "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/Atmospheric/triplets",
+        "CMAKE_BUILD_TYPE": "MinSizeRel"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "debug",
+      "displayName": "Debug",
+      "configurePreset": "desktop",
+      "configuration": "Debug"
+    },
+    {
+      "name": "release",
+      "displayName": "Release",
+      "configurePreset": "desktop",
+      "configuration": "Release"
+    },
+    {
+      "name": "wasm",
+      "displayName": "WebAssembly (MinSizeRel)",
+      "configurePreset": "wasm",
+      "configuration": "MinSizeRel"
+    }
+  ]
+}
