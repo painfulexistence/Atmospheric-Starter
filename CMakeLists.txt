@@ -5,44 +5,6 @@ cmake_minimum_required(VERSION 3.25)
 # Emscripten / iOS / Android triplets from the submodule are visible.
 list(APPEND VCPKG_OVERLAY_TRIPLETS "${CMAKE_CURRENT_LIST_DIR}/Atmospheric/triplets")
 
-# Android: regenerate the target triplet before vcpkg is included so the NDK
-# path is always correct. CMAKE_ANDROID_NDK and ANDROID_ABI are passed via -D
-# (Gradle sets them automatically; CI passes them explicitly). We check these
-# cache vars instead of ANDROID because the Android toolchain hasn't run yet
-# at this point (it runs during project() initialization).
-if(DEFINED CMAKE_ANDROID_NDK AND DEFINED ANDROID_ABI)
-    if(ANDROID_ABI STREQUAL "arm64-v8a")
-        set(_gq_arch arm64)
-        set(_gq_host aarch64-linux-android)
-    elseif(ANDROID_ABI STREQUAL "x86_64")
-        set(_gq_arch x64)
-        set(_gq_host x86_64-linux-android)
-    elseif(ANDROID_ABI STREQUAL "armeabi-v7a")
-        set(_gq_arch arm)
-        set(_gq_host arm-linux-androideabi)
-    elseif(ANDROID_ABI STREQUAL "x86")
-        set(_gq_arch x86)
-        set(_gq_host i686-linux-android)
-    endif()
-    if(_gq_arch)
-        file(WRITE
-            "${CMAKE_CURRENT_SOURCE_DIR}/Atmospheric/triplets/${_gq_arch}-android.cmake"
-            "set(VCPKG_TARGET_ARCHITECTURE ${_gq_arch})\n"
-            "set(VCPKG_CRT_LINKAGE dynamic)\n"
-            "set(VCPKG_LIBRARY_LINKAGE static)\n"
-            "set(VCPKG_CMAKE_SYSTEM_NAME Android)\n"
-            "set(VCPKG_CMAKE_SYSTEM_VERSION 28)\n"
-            "set(VCPKG_CHAINLOAD_TOOLCHAIN_FILE \"${CMAKE_ANDROID_NDK}/build/cmake/android.toolchain.cmake\")\n"
-            "set(VCPKG_MAKE_BUILD_TRIPLET \"--host=${_gq_host}\")\n"
-            "set(VCPKG_CMAKE_CONFIGURE_OPTIONS \"-DANDROID_ABI=${ANDROID_ABI}\")\n"
-        )
-        set(VCPKG_TARGET_TRIPLET "${_gq_arch}-android" CACHE STRING "" FORCE)
-        message(STATUS "Android: generated ${_gq_arch}-android triplet (NDK: ${CMAKE_ANDROID_NDK})")
-    endif()
-    unset(_gq_arch)
-    unset(_gq_host)
-endif()
-
 # When building for WebAssembly, chain the Emscripten toolchain through vcpkg.
 # The EMSDK env var is exported automatically by `source emsdk_env.sh`.
 if(VCPKG_TARGET_TRIPLET STREQUAL "wasm32-emscripten" AND NOT VCPKG_CHAINLOAD_TOOLCHAIN_FILE)
