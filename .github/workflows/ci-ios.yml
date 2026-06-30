@@ -1,4 +1,4 @@
-name: Build (iOS Simulator)
+name: Build (iOS)
 
 on:
   push:
