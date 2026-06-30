@@ -30,6 +30,11 @@ include(FetchContent)
 set(AE_ROOT_DIR   "${ROOT_DIR}/Atmospheric" CACHE PATH "" FORCE)
 set(AE_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(AE_USE_FFMPEG     OFF CACHE BOOL "" FORCE)
+
+# This adds Atmospheric/Engine directly, bypassing Atmospheric's own top-level
+# CMakeLists.txt (which normally exposes cmake/helpers via CMAKE_MODULE_PATH).
+# Engine/CMakeLists.txt's include(AssetPipeline) needs it added here instead.
+list(APPEND CMAKE_MODULE_PATH "${ROOT_DIR}/Atmospheric/cmake/helpers")
 add_subdirectory("${ROOT_DIR}/Atmospheric/Engine" "${CMAKE_BINARY_DIR}/Engine")
 
 find_package(glm    CONFIG REQUIRED)

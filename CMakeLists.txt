@@ -15,9 +15,11 @@ if(VCPKG_TARGET_TRIPLET STREQUAL "wasm32-emscripten" AND NOT VCPKG_CHAINLOAD_TOO
     endif()
 endif()
 
-include("${CMAKE_CURRENT_SOURCE_DIR}/Atmospheric/vcpkg/scripts/buildsystems/vcpkg.cmake")
-
 project(GradientQuad VERSION 1.0)
+
+# Included after project() so vcpkg's target-architecture auto-detection sees
+# the compiler/system info that project()'s enable_language() populates.
+include("${CMAKE_CURRENT_SOURCE_DIR}/Atmospheric/vcpkg/scripts/buildsystems/vcpkg.cmake")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
