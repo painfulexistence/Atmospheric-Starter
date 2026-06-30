@@ -11,6 +11,12 @@ cmake_minimum_required(VERSION 3.21)
 
 set(ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 
+# Both arm64-ios and arm64-ios-simulator vcpkg triplets only build arm64 slices.
+# Without this, Xcode defaults to its standard simulator archs (which includes
+# x86_64 on the Simulator SDK), and linking fails with missing symbols for the
+# x86_64 slice since vcpkg never built Bullet/RmlUi/box2d/fmt for it.
+set(CMAKE_OSX_ARCHITECTURES "arm64" CACHE STRING "" FORCE)
+
 # vcpkg must be loaded before project().
 # VCPKG_MANIFEST_DIR points vcpkg at the repo-root vcpkg.json regardless
 # of which directory cmake is invoked from.
