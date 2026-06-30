@@ -16,10 +16,10 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install NDK 27.3.13750724
+      - name: Install NDK 29.0.13113456
         run: |
-          yes | "${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" "ndk;27.3.13750724" > /dev/null
-          echo "ANDROID_NDK=${ANDROID_HOME}/ndk/27.3.13750724" >> "$GITHUB_ENV"
+          yes | "${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" "ndk;29.0.13113456" > /dev/null
+          echo "ANDROID_NDK=${ANDROID_HOME}/ndk/29.0.13113456" >> "$GITHUB_ENV"
 
       - name: Bootstrap vcpkg
         run: ./Atmospheric/vcpkg/bootstrap-vcpkg.sh -disableMetrics
