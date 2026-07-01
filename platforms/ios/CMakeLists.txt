@@ -17,12 +17,13 @@ set(ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 # x86_64 slice since vcpkg never built Bullet/RmlUi/box2d/fmt for it.
 set(CMAKE_OSX_ARCHITECTURES "arm64" CACHE STRING "" FORCE)
 
-# vcpkg must be loaded before project().
 # VCPKG_MANIFEST_DIR points vcpkg at the repo-root vcpkg.json regardless
 # of which directory cmake is invoked from.
 set(VCPKG_MANIFEST_DIR "${ROOT_DIR}" CACHE STRING "")
-list(APPEND VCPKG_OVERLAY_TRIPLETS "${ROOT_DIR}/Atmospheric/triplets")
-include("${ROOT_DIR}/Atmospheric/vcpkg/scripts/buildsystems/vcpkg.cmake")
+
+# All vcpkg wiring (toolchain file, overlay triplets) is encapsulated in the
+# engine; must precede project().
+include("${ROOT_DIR}/Atmospheric/cmake/InstallDependencies.cmake")
 
 project(GradientQuad-iOS LANGUAGES C CXX OBJC OBJCXX Swift)
 
@@ -38,9 +39,9 @@ set(AE_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(AE_USE_FFMPEG     OFF CACHE BOOL "" FORCE)
 
 # This adds Atmospheric/Engine directly, bypassing Atmospheric's own top-level
-# CMakeLists.txt (which normally exposes cmake/helpers via CMAKE_MODULE_PATH).
-# Engine/CMakeLists.txt's include(AssetPipeline) needs it added here instead.
-list(APPEND CMAKE_MODULE_PATH "${ROOT_DIR}/Atmospheric/cmake/helpers")
+# CMakeLists.txt. Engine/CMakeLists.txt's include(AssetPipeline) still resolves
+# because InstallDependencies.cmake (included above) already exposes
+# Atmospheric/cmake/helpers via CMAKE_MODULE_PATH.
 add_subdirectory("${ROOT_DIR}/Atmospheric/Engine" "${CMAKE_BINARY_DIR}/Engine")
 
 find_package(glm    CONFIG REQUIRED)

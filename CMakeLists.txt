@@ -1,25 +1,11 @@
 cmake_minimum_required(VERSION 3.25)
 
 # ── vcpkg bootstrap ────────────────────────────────────────────
-# Must precede project(). Forwards overlay triplets so that custom
-# Emscripten / iOS / Android triplets from the submodule are visible.
-list(APPEND VCPKG_OVERLAY_TRIPLETS "${CMAKE_CURRENT_LIST_DIR}/Atmospheric/triplets")
-
-# When building for WebAssembly, chain the Emscripten toolchain through vcpkg.
-# The EMSDK env var is exported automatically by `source emsdk_env.sh`.
-if(VCPKG_TARGET_TRIPLET STREQUAL "wasm32-emscripten" AND NOT VCPKG_CHAINLOAD_TOOLCHAIN_FILE)
-    if(DEFINED ENV{EMSDK})
-        set(VCPKG_CHAINLOAD_TOOLCHAIN_FILE
-            "$ENV{EMSDK}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
-            CACHE STRING "Emscripten toolchain (auto-detected from EMSDK)" FORCE)
-    endif()
-endif()
+# All vcpkg wiring (toolchain file, overlay triplets, Emscripten chainload)
+# is encapsulated in the engine; must precede project().
+include("${CMAKE_CURRENT_LIST_DIR}/Atmospheric/cmake/InstallDependencies.cmake")
 
 project(GradientQuad VERSION 1.0)
-
-# Included after project() so vcpkg's target-architecture auto-detection sees
-# the compiler/system info that project()'s enable_language() populates.
-include("${CMAKE_CURRENT_SOURCE_DIR}/Atmospheric/vcpkg/scripts/buildsystems/vcpkg.cmake")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
