@@ -19,6 +19,7 @@ env:
 
 jobs:
   build-wasm:
+    name: Emscripten WebGL, MinSizeRel
     runs-on: ubuntu-latest
 
     steps:

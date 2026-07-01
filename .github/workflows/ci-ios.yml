@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-ios-sim:
-    name: iOS Simulator arm64
+    name: iOS Simulator (arm64), Release
     runs-on: macos-latest
 
     steps:

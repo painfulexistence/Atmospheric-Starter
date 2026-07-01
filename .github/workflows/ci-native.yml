@@ -1,4 +1,4 @@
-name: Build (Native)
+name: Build (Desktop)
 
 on:
   push:
@@ -8,7 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-desktop:
+    name: Desktop, Debug and MinSizeRel
     runs-on: ${{ matrix.os }}
 
     strategy:

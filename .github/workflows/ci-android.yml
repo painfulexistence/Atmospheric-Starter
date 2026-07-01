@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-android:
-    name: Android (Gradle)
+    name: Android Release
     runs-on: ubuntu-latest
 
     steps:
