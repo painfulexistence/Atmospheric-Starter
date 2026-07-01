@@ -18,12 +18,9 @@ set(ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 set(CMAKE_OSX_ARCHITECTURES "arm64" CACHE STRING "" FORCE)
 
 # All vcpkg wiring (toolchain file, overlay triplets, manifest resolution) is
-# encapsulated in the engine; must precede project(). Set AE_USE_VCPKG=OFF to
-# wire up your own package manager instead.
-option(AE_USE_VCPKG "Resolve dependencies via the bundled vcpkg" ON)
-if(AE_USE_VCPKG)
-    include("${ROOT_DIR}/Atmospheric/cmake/InstallDependencies.cmake")
-endif()
+# encapsulated in the engine; must precede project(). See README.md for how
+# to swap this out for a different package manager.
+include("${ROOT_DIR}/Atmospheric/cmake/InstallDependencies.cmake")
 
 project(GradientQuad-iOS LANGUAGES C CXX OBJC OBJCXX Swift)
 
