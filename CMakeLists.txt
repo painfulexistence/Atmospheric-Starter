@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.22)
 
 # ── vcpkg bootstrap ────────────────────────────────────────────
 # All vcpkg wiring (toolchain file, overlay triplets, Emscripten chainload,
