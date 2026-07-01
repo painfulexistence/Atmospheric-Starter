@@ -18,6 +18,7 @@ CMakeFiles
 CMakeScripts
 cmake_install.cmake
 cmake_uninstall.cmake
+CMakeUserPresets.json
 
 # Android Gradle / CXX build intermediates
 .gradle/

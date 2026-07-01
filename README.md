@@ -1,5 +1,38 @@
 # Atmospheric-Starter
 
+A cross-platform starter app (desktop, Android, iOS, WebAssembly) built on
+the [Atmospheric](https://github.com/painfulexistence/Atmospheric) engine.
+
+## Build (Desktop)
+
+Prerequisites: CMake 3.22+, a C++20 compiler, [Ninja](https://ninja-build.org/).
+
+```sh
+git clone --recurse-submodules https://github.com/painfulexistence/Atmospheric-Starter.git
+cd Atmospheric-Starter
+
+cmake --preset desktop
+cmake --build --preset debug   # or --preset release
+```
+
+(Already cloned without `--recurse-submodules`? Run
+`git submodule update --init --recursive` — `Atmospheric/` itself has a
+nested `vcpkg` submodule.)
+
+The first configure bootstraps vcpkg and builds all dependencies from
+source, so it takes a while; subsequent builds are fast. The binary lands
+under `build/<Debug|Release>/GradientQuad/`.
+
+## Build (Android / iOS / WebAssembly)
+
+- **Android**: open `platforms/android/` in Android Studio, or run
+  `./gradlew assembleDebug` from that directory.
+- **iOS**: see the usage comment at the top of `platforms/ios/CMakeLists.txt`.
+- **WebAssembly**: `cmake --preset wasm && cmake --build --preset wasm`
+  (requires an activated [Emscripten](https://emscripten.org/) SDK — see
+  `EMSDK_VERSION` in `.github/workflows/ci-web.yml` for the version this
+  repo is tested against).
+
 ## Dependencies
 
 By default this project resolves its dependencies through the vcpkg
