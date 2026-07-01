@@ -41,6 +41,7 @@
       "name": "wasm",
       "displayName": "WebAssembly (Emscripten + local vcpkg, MinSizeRel)",
       "description": "Requires EMSDK env var pointing to an activated emsdk installation",
+      "generator": "Ninja",
       "binaryDir": "${sourceDir}/build-wasm",
       "inherits": ["vcpkg-submodule"],
       "cacheVariables": {
@@ -66,8 +67,7 @@
     {
       "name": "wasm",
       "displayName": "WebAssembly (MinSizeRel)",
-      "configurePreset": "wasm",
-      "configuration": "MinSizeRel"
+      "configurePreset": "wasm"
     }
   ]
 }
