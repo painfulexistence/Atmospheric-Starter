@@ -52,7 +52,7 @@ jobs:
           path: |
             ${{ github.workspace }}/Atmospheric/vcpkg/installed
             ${{ github.workspace }}/Atmospheric/vcpkg/packages
-          key: vcpkg-wasm32-emscripten-${{ hashFiles('vcpkg.json', 'Atmospheric/triplets/wasm32-emscripten.cmake') }}
+          key: vcpkg-wasm32-emscripten-${{ hashFiles('Atmospheric/vcpkg.json', 'Atmospheric/triplets/wasm32-emscripten.cmake') }}
           restore-keys: |
             vcpkg-wasm32-emscripten-
 

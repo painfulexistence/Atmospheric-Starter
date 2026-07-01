@@ -51,7 +51,7 @@ jobs:
           path: |
             ${{ github.workspace }}/Atmospheric/vcpkg/installed
             ${{ github.workspace }}/Atmospheric/vcpkg/packages
-          key: vcpkg-${{ runner.os }}-${{ hashFiles('vcpkg.json') }}
+          key: vcpkg-${{ runner.os }}-${{ hashFiles('Atmospheric/vcpkg.json') }}
           restore-keys: |
             vcpkg-${{ runner.os }}-
 

@@ -31,7 +31,7 @@ jobs:
           path: |
             Atmospheric/vcpkg/installed
             Atmospheric/vcpkg/packages
-          key: vcpkg-android-arm64-${{ hashFiles('vcpkg.json') }}
+          key: vcpkg-android-arm64-${{ hashFiles('Atmospheric/vcpkg.json') }}
           restore-keys: vcpkg-android-arm64-
 
       - name: Configure

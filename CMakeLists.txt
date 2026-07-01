@@ -1,9 +1,16 @@
 cmake_minimum_required(VERSION 3.25)
 
 # ── vcpkg bootstrap ────────────────────────────────────────────
-# All vcpkg wiring (toolchain file, overlay triplets, Emscripten chainload)
-# is encapsulated in the engine; must precede project().
-include("${CMAKE_CURRENT_LIST_DIR}/Atmospheric/cmake/InstallDependencies.cmake")
+# All vcpkg wiring (toolchain file, overlay triplets, Emscripten chainload,
+# manifest resolution) is encapsulated in the engine; must precede project().
+# Set AE_USE_VCPKG=OFF to wire up your own package manager instead (Conan,
+# system packages, etc.) — Engine/CMakeLists.txt only uses plain
+# find_package(CONFIG), so any provider that produces matching imported
+# targets works.
+option(AE_USE_VCPKG "Resolve dependencies via the bundled vcpkg" ON)
+if(AE_USE_VCPKG)
+    include("${CMAKE_CURRENT_LIST_DIR}/Atmospheric/cmake/InstallDependencies.cmake")
+endif()
 
 project(GradientQuad VERSION 1.0)
 
