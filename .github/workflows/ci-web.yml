@@ -68,9 +68,6 @@ jobs:
       - name: CMake Build
         run: cmake --build ${{ github.workspace }}/build --parallel
 
-  # WebGPU compile check (non-blocking) — mirrors Atmospheric's own ci-web.yml.
-  # Verifies AE_USE_WEBGPU=ON compiles cleanly with emdawnwebgpu. The WebGPU
-  # backend is still WIP upstream, so failures here don't block merging.
   build-wasm-webgpu:
     name: Emscripten WebGPU, MinSizeRel
     runs-on: ubuntu-latest
