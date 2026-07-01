@@ -1,5 +1,10 @@
 # Atmospheric-Starter
 
+[![Build (Desktop)](https://github.com/painfulexistence/Atmospheric-Starter/actions/workflows/ci-desktop.yml/badge.svg)](https://github.com/painfulexistence/Atmospheric-Starter/actions/workflows/ci-desktop.yml)
+[![Build (Android)](https://github.com/painfulexistence/Atmospheric-Starter/actions/workflows/ci-android.yml/badge.svg)](https://github.com/painfulexistence/Atmospheric-Starter/actions/workflows/ci-android.yml)
+[![Build (iOS)](https://github.com/painfulexistence/Atmospheric-Starter/actions/workflows/ci-ios.yml/badge.svg)](https://github.com/painfulexistence/Atmospheric-Starter/actions/workflows/ci-ios.yml)
+[![Build (WebAssembly)](https://github.com/painfulexistence/Atmospheric-Starter/actions/workflows/ci-web.yml/badge.svg)](https://github.com/painfulexistence/Atmospheric-Starter/actions/workflows/ci-web.yml)
+
 A cross-platform starter app (desktop, Android, iOS, WebAssembly) built on
 the [Atmospheric](https://github.com/painfulexistence/Atmospheric) engine.
 
