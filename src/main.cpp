@@ -50,14 +50,18 @@ class GradientQuad : public Application {
     using Application::Application;
 
     static constexpr float kSpeed = 0.08f;  // full hue rotation in ~12.5 s
-    static constexpr float kW     = 1280.0f;
-    static constexpr float kH     = 720.0f;
 
     void OnInit() override {
         GoScene("main", [this] { OnLoad(); });
     }
 
     void OnLoad() override {
+        // Read the actual window size rather than assuming a fixed resolution,
+        // so the four quads always tile the viewport exactly.
+        const ImageSize windowSize = GetWindow()->GetLogicalSize();
+        const float kW = static_cast<float>(windowSize.width);
+        const float kH = static_cast<float>(windowSize.height);
+
         const glm::vec3 origins[4] = {
             {0.0f,      0.0f,      0.0f},
             {kW * 0.5f, 0.0f,      0.0f},
