@@ -33,15 +33,9 @@ There are three ways to work with this, depending on what your game needs:
 
 ## Android
 
-The root `CMakeLists.txt` requires CMake 3.25+, newer than what Android
-Studio's SDK Manager typically offers as an auto-installable CMake package.
-`platforms/android/app/build.gradle.kts` doesn't pin a `version` for its
-`externalNativeBuild.cmake` block, so you need to point Gradle at a CMake
-3.25+ binary yourself via `platforms/android/local.properties`:
-
-```properties
-cmake.dir=/path/to/a/cmake-3.25-or-newer/install/prefix
-```
-
-(the directory containing `bin/cmake`, not the binary itself). CI computes
-this automatically from whatever `cmake` is on `PATH` — see `ci-android.yml`.
+The root `CMakeLists.txt` requires CMake 3.25+.
+`platforms/android/app/build.gradle.kts` pins `externalNativeBuild.cmake.version`
+to `3.25.0`, which Android Studio / the command-line SDK Manager will
+auto-download on first build (accept the CMake license if prompted). If your
+installed SDK Manager only offers CMake packages older than 3.25, update the
+`cmdline-tools` package first.

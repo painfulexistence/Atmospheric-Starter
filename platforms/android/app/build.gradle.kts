@@ -86,10 +86,9 @@ android {
         cmake {
             // Points to root CMakeLists.txt (3 levels up from platforms/android/app/)
             path = file("../../../CMakeLists.txt")
-            // No pinned `version` here: the root CMakeLists.txt requires CMake 3.25+,
-            // newer than AGP's default SDK-managed CMake package. Point Gradle at a
-            // system CMake instead via `cmake.dir` in local.properties (see README /
-            // ci-android.yml, which computes it from `command -v cmake`).
+            // Root CMakeLists.txt requires CMake 3.25+; the SDK Manager didn't offer
+            // anything past 3.22.1 for a long time, but newer cmdline-tools do.
+            version = "3.25.0"
         }
     }
 

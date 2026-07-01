@@ -39,11 +39,6 @@ jobs:
           key: vcpkg-android-${{ hashFiles('Atmospheric/vcpkg.json') }}
           restore-keys: vcpkg-android-
 
-      - name: Point Gradle at a CMake 3.25+ toolchain
-        working-directory: platforms/android
-        run: |
-          echo "cmake.dir=$(dirname "$(dirname "$(command -v cmake)")")" >> local.properties
-
       - name: Build APK (Gradle)
         working-directory: platforms/android
         run: |
