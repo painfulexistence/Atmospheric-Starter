@@ -5,8 +5,6 @@ name: Build (WebAssembly)
 #   - Missing Emscripten flags (-sALLOW_MEMORY_GROWTH, -sDISABLE_EXCEPTION_CATCHING)
 #   - WASM-incompatible dependencies (x86 archives, system glad, etc.)
 #   - Emscripten-incompatible C++ (non-portable intrinsics, POSIX-only APIs)
-#
-# The .html + .wasm + .js + .data artifact is uploaded for manual browser testing.
 
 on:
   push:
@@ -68,11 +66,3 @@ jobs:
 
       - name: CMake Build
         run: cmake --build ${{ github.workspace }}/build --parallel
-
-      - name: Upload WebAssembly artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: gradient-quad-wasm-${{ github.sha }}
-          path: ${{ github.workspace }}/build/GradientQuad/
-          if-no-files-found: error
-          retention-days: 30

@@ -44,11 +44,3 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew assembleRelease --no-daemon
-
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: gradient-quad-android-${{ github.sha }}
-          path: platforms/android/app/build/outputs/apk/release/*.apk
-          if-no-files-found: error
-          retention-days: 30
