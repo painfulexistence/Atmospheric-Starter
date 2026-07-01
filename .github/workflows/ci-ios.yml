@@ -9,13 +9,8 @@ on:
 
 jobs:
   build-ios-sim:
-    name: iOS Simulator (arm64), ${{ matrix.config }}
+    name: iOS Simulator (arm64), Release
     runs-on: macos-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        config: [Debug, Release]
 
     steps:
       - uses: actions/checkout@v4
@@ -44,4 +39,4 @@ jobs:
             -DVCPKG_TARGET_TRIPLET=arm64-ios-simulator
 
       - name: Build
-        run: cmake --build build-ios-sim --config ${{ matrix.config }}
+        run: cmake --build build-ios-sim --config Release

@@ -9,13 +9,8 @@ on:
 
 jobs:
   build-android:
-    name: Android, ${{ matrix.build-type }}
+    name: Android Release
     runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        build-type: [Debug, Release]
 
     steps:
       - uses: actions/checkout@v4
@@ -48,4 +43,4 @@ jobs:
         working-directory: platforms/android
         run: |
           chmod +x gradlew
-          ./gradlew assemble${{ matrix.build-type }} --no-daemon
+          ./gradlew assembleRelease --no-daemon

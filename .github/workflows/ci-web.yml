@@ -19,13 +19,8 @@ env:
 
 jobs:
   build-wasm-webgl:
-    name: Emscripten WebGL, ${{ matrix.build-type }}
+    name: Emscripten WebGL, MinSizeRel
     runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        build-type: [Debug, MinSizeRel]
 
     steps:
       - uses: actions/checkout@v4
@@ -68,7 +63,7 @@ jobs:
           -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/Atmospheric/vcpkg/scripts/buildsystems/vcpkg.cmake
           -DVCPKG_OVERLAY_TRIPLETS=${{ github.workspace }}/Atmospheric/triplets
           -DVCPKG_TARGET_TRIPLET=wasm32-emscripten
-          -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}
+          -DCMAKE_BUILD_TYPE=MinSizeRel
 
       - name: CMake Build
         run: cmake --build ${{ github.workspace }}/build --parallel
