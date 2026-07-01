@@ -26,7 +26,7 @@ nested `vcpkg` submodule.)
 
 The first configure bootstraps vcpkg and builds all dependencies from
 source, so it takes a while; subsequent builds are fast. The binary lands
-under `build/<Debug|Release>/GradientQuad/`.
+under `build/GradientQuad/<Debug|Release>/`.
 
 ## Build (Android / iOS / WebAssembly)
 
