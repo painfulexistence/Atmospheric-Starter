@@ -98,3 +98,4 @@ target_include_directories(main PRIVATE
 )
 
 ae_copy_engine_assets(main)
+ae_copy_game_assets(main "${ROOT_DIR}/assets")

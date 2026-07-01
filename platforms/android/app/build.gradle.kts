@@ -52,6 +52,10 @@ val copyAssetsTask = tasks.register<Copy>("copyAssetsForAndroid") {
     from("../../../Atmospheric/Engine/default_assets") {
         into("assets")
     }
+    // GradientQuad's own assets (e.g. scene manifests)
+    from("../../../assets") {
+        into("assets")
+    }
     into(file("build/generated/assets"))
 }
 

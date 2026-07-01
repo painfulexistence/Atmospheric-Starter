@@ -66,6 +66,9 @@ if(EMSCRIPTEN)
         COMMAND ${CMAKE_COMMAND} -E copy_directory
             ${CMAKE_CURRENT_SOURCE_DIR}/Atmospheric/Engine/default_assets/fonts
             ${EM_ASSETS}/fonts
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${CMAKE_CURRENT_SOURCE_DIR}/assets/scenes
+            ${EM_ASSETS}/scenes
         COMMENT "Staging Emscripten preload assets for GradientQuad"
     )
     add_dependencies(${APP_TARGET} stage_gq_preload)
@@ -76,6 +79,7 @@ if(EMSCRIPTEN)
         -sDISABLE_EXCEPTION_CATCHING=0
         "SHELL:--preload-file ${EM_ASSETS}/shaders@assets/shaders"
         "SHELL:--preload-file ${EM_ASSETS}/fonts@assets/fonts"
+        "SHELL:--preload-file ${EM_ASSETS}/scenes@assets/scenes"
         "SHELL:--shell-file ${CMAKE_CURRENT_SOURCE_DIR}/shell.html"
     )
 elseif(NOT IOS)
@@ -90,3 +94,4 @@ elseif(NOT IOS)
 endif()
 
 ae_copy_engine_assets(${APP_TARGET})
+ae_copy_game_assets(${APP_TARGET} "${CMAKE_CURRENT_SOURCE_DIR}/assets")
