@@ -5,6 +5,8 @@
 [![Build (iOS)](https://github.com/painfulexistence/Atmospheric-Starter/actions/workflows/ci-ios.yml/badge.svg)](https://github.com/painfulexistence/Atmospheric-Starter/actions/workflows/ci-ios.yml)
 [![Build (WebAssembly)](https://github.com/painfulexistence/Atmospheric-Starter/actions/workflows/ci-web.yml/badge.svg)](https://github.com/painfulexistence/Atmospheric-Starter/actions/workflows/ci-web.yml)
 
+<a href='https://ko-fi.com/P5P8BWF9V' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi3.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+
 A cross-platform starter app (desktop, Android, iOS, WebAssembly) built on
 the [Atmospheric](https://github.com/painfulexistence/Atmospheric) engine.
 
