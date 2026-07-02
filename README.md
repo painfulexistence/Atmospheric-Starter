@@ -68,3 +68,9 @@ There are three ways to work with this, depending on what your game needs:
    same imported targets (`glad::glad`, `glm::glm`, `Bullet::*`,
    `RmlUi::RmlUi`, `box2d::box2d`, `fmt::fmt`, `spdlog::spdlog`,
    `flatbuffers::flatbuffers`).
+
+## Licensing
+
+This starter repository is dedicated to the public domain under the [CC0 1.0 Universal](LICENSE) license. You can copy, modify, and distribute the starter template code without any attribution or permission.
+
+However, please note that the **Atmospheric** engine (located in the `Atmospheric/` directory as a Git submodule) is licensed under the [MIT License](Atmospheric/LICENSE). Projects built using this template must still comply with the Atmospheric engine's license terms.
