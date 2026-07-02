@@ -1,0 +1,27 @@
+build/
+build*/
+build-wasm/
+www/
+imgui.ini
+.vscode/settings.json
+.cache/
+
+# Claude Code internal
+.claude/
+
+# macOS
+.DS_Store
+
+# CMake
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+cmake_install.cmake
+cmake_uninstall.cmake
+CMakeUserPresets.json
+
+# Android Gradle / CXX build intermediates
+.gradle/
+local.properties
+.cxx/
+**/build/
