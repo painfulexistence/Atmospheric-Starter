@@ -1,49 +1,53 @@
 {
-  "version": 6,
-  "cmakeMinimumRequired": { "major": 3, "minor": 25, "patch": 0 },
+  "version": 3,
   "configurePresets": [
     {
-      "name": "base",
+      "name": "vcpkg",
       "hidden": true,
+      "description": "Toolchain base: vcpkg bundled inside the Atmospheric submodule — works offline after first build. compile_commands.json is exported wherever the generator supports it.",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/Atmospheric/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      }
+    },
+    {
+      "name": "ccache",
+      "hidden": true,
+      "description": "Opt-in compiler cache mixin. Not baked into the shared presets because ccache isn't guaranteed on every machine (and MSVC needs extra setup). Enable it from your machine-local CMakeUserPresets.json — see CMakeUserPresets.json.example.",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER_LAUNCHER": "ccache",
+        "CMAKE_CXX_COMPILER_LAUNCHER": "ccache"
+      }
+    },
+    {
+      "name": "ninja",
+      "displayName": "Ninja Multi-Config (bundled vcpkg)",
+      "description": "The default family on every desktop platform: configure once, then build any config via the debug/release build presets from the same tree. On Windows this drives MSVC — run from a 'x64 Native Tools for VS 2022' prompt, or let VS Code's CMake Tools supply the kit. Same name and shape as the engine repo's presets.",
       "generator": "Ninja Multi-Config",
-      "binaryDir": "${sourceDir}/build"
+      "binaryDir": "${sourceDir}/build",
+      "inherits": ["vcpkg"]
     },
     {
-      "name": "vcpkg-submodule",
-      "hidden": true,
-      "description": "vcpkg bundled inside the Atmospheric submodule — works offline after first build",
-      "cacheVariables": {
-        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/Atmospheric/vcpkg/scripts/buildsystems/vcpkg.cmake"
+      "name": "vs",
+      "displayName": "Visual Studio 2022 (x64)",
+      "description": "The Windows IDE family: produces GradientQuad.sln in build-vs/ — open it in Visual Studio and F5 to build + debug (native debugger, profiler, natvis). Locates MSVC itself, so no developer prompt is needed. Separate binary dir from the ninja family — CMake refuses to reuse a build tree across generators.",
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64",
+      "binaryDir": "${sourceDir}/build-vs",
+      "inherits": ["vcpkg"],
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
       }
-    },
-    {
-      "name": "vcpkg-system",
-      "hidden": true,
-      "description": "System-wide vcpkg via VCPKG_ROOT env var (GitHub Actions / CI)",
-      "cacheVariables": {
-        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-      }
-    },
-    {
-      "name": "desktop",
-      "displayName": "Desktop (local vcpkg, Ninja Multi-Config)",
-      "description": "Default developer preset — uses vcpkg from the Atmospheric submodule",
-      "inherits": ["base", "vcpkg-submodule"]
-    },
-    {
-      "name": "desktop-ci",
-      "displayName": "Desktop CI (system vcpkg, Ninja Multi-Config)",
-      "description": "For GitHub Actions; expects VCPKG_ROOT to be set",
-      "hidden": true,
-      "inherits": ["base", "vcpkg-system"]
     },
     {
       "name": "wasm",
-      "displayName": "WebAssembly (Emscripten + local vcpkg, MinSizeRel)",
-      "description": "Requires EMSDK env var pointing to an activated emsdk installation",
+      "displayName": "WebAssembly (Emscripten + bundled vcpkg, MinSizeRel)",
+      "description": "Requires EMSDK env var pointing to an activated emsdk installation. Single-config Ninja, so unlike the ninja family the configuration is fixed here at configure time.",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build-wasm",
-      "inherits": ["vcpkg-submodule"],
+      "inherits": ["vcpkg"],
       "cacheVariables": {
         "VCPKG_TARGET_TRIPLET": "wasm32-emscripten",
         "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/Atmospheric/triplets",
@@ -54,19 +58,36 @@
   "buildPresets": [
     {
       "name": "debug",
-      "displayName": "Debug",
-      "configurePreset": "desktop",
+      "configurePreset": "ninja",
       "configuration": "Debug"
     },
     {
       "name": "release",
-      "displayName": "Release",
-      "configurePreset": "desktop",
+      "configurePreset": "ninja",
       "configuration": "Release"
     },
     {
+      "name": "vs-debug",
+      "configurePreset": "vs",
+      "configuration": "Debug",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "vs-release",
+      "configurePreset": "vs",
+      "configuration": "Release",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
       "name": "wasm",
-      "displayName": "WebAssembly (MinSizeRel)",
       "configurePreset": "wasm"
     }
   ]
