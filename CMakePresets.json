@@ -4,7 +4,6 @@
     {
       "name": "vcpkg",
       "hidden": true,
-      "description": "Toolchain base: vcpkg bundled inside the Atmospheric submodule — works offline after first build. compile_commands.json is exported wherever the generator supports it.",
       "cacheVariables": {
         "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/Atmospheric/vcpkg/scripts/buildsystems/vcpkg.cmake",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
@@ -13,7 +12,7 @@
     {
       "name": "ccache",
       "hidden": true,
-      "description": "Opt-in compiler cache mixin. Not baked into the shared presets because ccache isn't guaranteed on every machine (and MSVC needs extra setup). Enable it from your machine-local CMakeUserPresets.json — see CMakeUserPresets.json.example.",
+      "description": "Opt-in mixin — enable from your CMakeUserPresets.json (see CMakeUserPresets.json.example).",
       "cacheVariables": {
         "CMAKE_C_COMPILER_LAUNCHER": "ccache",
         "CMAKE_CXX_COMPILER_LAUNCHER": "ccache"
@@ -22,7 +21,7 @@
     {
       "name": "ninja",
       "displayName": "Ninja Multi-Config (bundled vcpkg)",
-      "description": "The default family on every desktop platform: configure once, then build any config via the debug/release build presets from the same tree. On Windows this drives MSVC — run from a 'x64 Native Tools for VS 2022' prompt, or let VS Code's CMake Tools supply the kit. Same name and shape as the engine repo's presets.",
+      "description": "On Windows, run from a 'x64 Native Tools for VS 2022' prompt or use a VS Code CMake Tools kit.",
       "generator": "Ninja Multi-Config",
       "binaryDir": "${sourceDir}/build",
       "inherits": ["vcpkg"]
@@ -30,7 +29,7 @@
     {
       "name": "vs",
       "displayName": "Visual Studio 2022 (x64)",
-      "description": "The Windows IDE family: produces GradientQuad.sln in build-vs/ — open it in Visual Studio and F5 to build + debug (native debugger, profiler, natvis). Locates MSVC itself, so no developer prompt is needed. Separate binary dir from the ninja family — CMake refuses to reuse a build tree across generators.",
+      "description": "Produces GradientQuad.sln in build-vs/ — no developer prompt needed.",
       "generator": "Visual Studio 17 2022",
       "architecture": "x64",
       "binaryDir": "${sourceDir}/build-vs",
@@ -44,7 +43,7 @@
     {
       "name": "wasm",
       "displayName": "WebAssembly (Emscripten + bundled vcpkg, MinSizeRel)",
-      "description": "Requires EMSDK env var pointing to an activated emsdk installation. Single-config Ninja, so unlike the ninja family the configuration is fixed here at configure time.",
+      "description": "Requires EMSDK env var pointing to an activated emsdk installation.",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build-wasm",
       "inherits": ["vcpkg"],
