@@ -18,7 +18,7 @@ Prerequisites: CMake 3.22+, a C++20 compiler, [Ninja](https://ninja-build.org/).
 git clone --recurse-submodules https://github.com/painfulexistence/Atmospheric-Starter.git
 cd Atmospheric-Starter
 
-cmake --preset desktop
+cmake --preset ninja
 cmake --build --preset debug   # or --preset release
 ```
 
@@ -29,6 +29,12 @@ nested `vcpkg` submodule.)
 The first configure bootstraps vcpkg and builds all dependencies from
 source, so it takes a while; subsequent builds are fast. The binary lands
 under `build/GradientQuad/<Debug|Release>/`.
+
+On Windows you can instead generate a Visual Studio solution:
+`cmake --preset vs` writes `GradientQuad.sln` into `build-vs/` (open it and
+F5 — no developer prompt needed). For personal tweaks such as ccache, copy
+`CMakeUserPresets.json.example` to `CMakeUserPresets.json` (gitignored) and
+adjust freely.
 
 ## Build (Android / iOS / WebAssembly)
 

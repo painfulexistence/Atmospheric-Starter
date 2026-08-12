@@ -1,49 +1,51 @@
 {
-  "version": 6,
-  "cmakeMinimumRequired": { "major": 3, "minor": 25, "patch": 0 },
+  "version": 3,
   "configurePresets": [
     {
-      "name": "base",
+      "name": "vcpkg",
       "hidden": true,
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/Atmospheric/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      }
+    },
+    {
+      "name": "ccache",
+      "hidden": true,
+      "description": "Opt-in mixin — enable from your CMakeUserPresets.json (see CMakeUserPresets.json.example).",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER_LAUNCHER": "ccache",
+        "CMAKE_CXX_COMPILER_LAUNCHER": "ccache"
+      }
+    },
+    {
+      "name": "ninja",
+      "displayName": "Ninja Multi-Config (bundled vcpkg)",
+      "description": "On Windows, run from a 'x64 Native Tools for VS 2022' prompt or use a VS Code CMake Tools kit.",
       "generator": "Ninja Multi-Config",
-      "binaryDir": "${sourceDir}/build"
+      "binaryDir": "${sourceDir}/build",
+      "inherits": ["vcpkg"]
     },
     {
-      "name": "vcpkg-submodule",
-      "hidden": true,
-      "description": "vcpkg bundled inside the Atmospheric submodule — works offline after first build",
-      "cacheVariables": {
-        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/Atmospheric/vcpkg/scripts/buildsystems/vcpkg.cmake"
+      "name": "vs",
+      "displayName": "Visual Studio (x64)",
+      "description": "Produces GradientQuad.sln in build-vs/ for the newest installed Visual Studio — no developer prompt needed.",
+      "architecture": "x64",
+      "binaryDir": "${sourceDir}/build-vs",
+      "inherits": ["vcpkg"],
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
       }
-    },
-    {
-      "name": "vcpkg-system",
-      "hidden": true,
-      "description": "System-wide vcpkg via VCPKG_ROOT env var (GitHub Actions / CI)",
-      "cacheVariables": {
-        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-      }
-    },
-    {
-      "name": "desktop",
-      "displayName": "Desktop (local vcpkg, Ninja Multi-Config)",
-      "description": "Default developer preset — uses vcpkg from the Atmospheric submodule",
-      "inherits": ["base", "vcpkg-submodule"]
-    },
-    {
-      "name": "desktop-ci",
-      "displayName": "Desktop CI (system vcpkg, Ninja Multi-Config)",
-      "description": "For GitHub Actions; expects VCPKG_ROOT to be set",
-      "hidden": true,
-      "inherits": ["base", "vcpkg-system"]
     },
     {
       "name": "wasm",
-      "displayName": "WebAssembly (Emscripten + local vcpkg, MinSizeRel)",
-      "description": "Requires EMSDK env var pointing to an activated emsdk installation",
+      "displayName": "WebAssembly (Emscripten + bundled vcpkg, MinSizeRel)",
+      "description": "Requires EMSDK env var pointing to an activated emsdk installation.",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build-wasm",
-      "inherits": ["vcpkg-submodule"],
+      "inherits": ["vcpkg"],
       "cacheVariables": {
         "VCPKG_TARGET_TRIPLET": "wasm32-emscripten",
         "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/Atmospheric/triplets",
@@ -54,19 +56,36 @@
   "buildPresets": [
     {
       "name": "debug",
-      "displayName": "Debug",
-      "configurePreset": "desktop",
+      "configurePreset": "ninja",
       "configuration": "Debug"
     },
     {
       "name": "release",
-      "displayName": "Release",
-      "configurePreset": "desktop",
+      "configurePreset": "ninja",
       "configuration": "Release"
     },
     {
+      "name": "vs-debug",
+      "configurePreset": "vs",
+      "configuration": "Debug",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "vs-release",
+      "configurePreset": "vs",
+      "configuration": "Release",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
       "name": "wasm",
-      "displayName": "WebAssembly (MinSizeRel)",
       "configurePreset": "wasm"
     }
   ]
